@@ -299,7 +299,8 @@ Generates a production-ready build of your app. This process includes minifying 
 Polymer CLI's build process is designed for apps that follow the [app shell architecture](https://developers.google.com/web/updates/2015/11/app-shell). To make sure your app builds properly, create a `polymer.json` file at the top-level of your project and store your
 build configurations there. The following properties can be used:
 
-- `entrypoint`: The main entrypoint into your application for all routes. Often times this is your `index.html` file. This file should import the app shell file specified in the shell option. It should be minimal since it's loaded and cached for each route.
+- `root`: Optional file path to your project root directory, if it isn't the current working directory. All other configured file paths (`entrypoint`, `shell`, etc.) are relative to this project root. This can be an absolute path, or a path relative to the current working directory.
+- `entrypoint`: The main entrypoint into your application for all routes, relative to your project root. Often times this is your `index.html` file. This file should import the app shell file specified in the shell option. It should be minimal since it's loaded and cached for each route.
 - `shell`: The app shell file containing common code for the app.
 - `fragment`: An array of any HTML files that are not synchronously loaded from the app shell, such as async imports or any imports loaded on-demand (e.g. by importHref).
 - `sources`: An optional array of globs matching your application source files. This will default to all files in your project `src/` directory, but configuring your own list of sources can be useful when your source files live in other directories.
