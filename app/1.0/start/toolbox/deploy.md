@@ -138,10 +138,10 @@ guide](https://www.firebase.com/docs/hosting/quickstart.html).
     end in a file extension.
 
     ```
-    "rewrites": [ {
-      "source": "**/!{*.*}",
+    "rewrites": [{
+      "source": "**/!(*.js|*.html|*.css|*.json|*.svg|*.png|*.jpg|*.jpeg)",
       "destination": "/index.html"
-    } ]
+    }
     ```
 
 1.  Deploy.
