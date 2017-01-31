@@ -290,64 +290,24 @@ App project example (linting multiple elements):
 
 If all of the elements you want to test are in the same directory, you can specify the `--root` flag to make all of the `--input` files relative to that directory.
 
+
 ### Build app {#build}
 
 *This command is for app projects only.*
 
-Generates a production-ready build of your app. This process includes minifying the HTML, CSS, and JS of the application dependencies, and generating a service worker to pre-cache dependencies.
+Generate a production-ready build of your application. This copies only the dependencies your application uses into a single build, and can optionally minify, optimize, and bundle your project automatically.
 
-Polymer CLI's build process is designed for apps that follow the [app shell architecture](https://developers.google.com/web/updates/2015/11/app-shell). To make sure your app builds properly, create a `polymer.json` file at the top-level of your project and store your
-build configurations there. The following properties can be used:
+Basic build example (see `/build` directory afterwards for the result):
 
-- `entrypoint`: The main entrypoint into your application for all routes. Often times this is your `index.html` file. This file should import the app shell file specified in the shell option. It should be minimal since it's loaded and cached for each route.
-- `shell`: The app shell file containing common code for the app.
-- `fragment`: An array of any HTML files that are not synchronously loaded from the app shell, such as async imports or any imports loaded on-demand (e.g. by importHref).
-- `sources`: An optional array of globs matching your application source files. This will default to all files in your project `src/` directory, but configuring your own list of sources can be useful when your source files live in other directories.
-- `includeDependencies`: An optional array of globs matching any additional dependencies you'd like to include with your build. If your application loads any files dynamically they can be missed by the analyzer, but you can include them here to make sure that they are always added to your build.
-  *Note: If you ever use polymer-build to define your own build process you can decide to handle sources & dependencies differently. But Polymer CLI currently treats additional files included in `sources` & `includeDependencies` the same, so place any additional files wherever you think makes the most sense.
+    polymer build
 
-For example, suppose you added an app shell (`app-shell.html`) and two views (`view-one.html` and `view-two.html`) for your `basic` app project, as well as a directory of images to display within your application. You'd specify them in your build with the following `polymer.json` configuration:
 
-```json
-{
-  "entrypoint": "index.html",
-  "shell": "src/app-shell/app-shell.html",
-  "fragments": [
-    "src/view-one/view-one.html",
-    "src/view-one/view-two.html"
-  ],
-  "sources": [
-    "src/**/*",
-    "images/**/*",
-    "bower.json"
-  ],
-  "includeDependencies": [
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
-  ]
-}
-```
+Polymer CLI's build process is designed for apps that follow the [app shell architecture](https://developers.google.com/web/updates/2015/11/app-shell). Adding a `polymer.json` file to your build directory will allow you to define the app-shell structure of your application for build analysis and bundling. See the `polymer.json` documentation for more information about how to set this up.
 
-You can also pass these values via command-line flags. For example, in a newly created `basic` app project you could run the following command to generate a build:
+The build command can also generate a service worker for you automatically, based on the [sw-precache](https://github.com/GoogleChrome/sw-precache) library. To customize your service worker, create a `sw-precache-config.js` file in your project directory that exports your configuration. See the [sw-precache README](https://github.com/GoogleChrome/sw-precache) for a list of all supported options.
 
-    polymer build --entrypoint index.html
+    polymer build --add-service-worker
 
-This can be useful for building simple projects on your machine but you will need to include the flag every time you run the command. For most projects a `polymer.json` configuration file will be easier to work with and share across your team.
-
-#### Service workers
-
-Polymer CLI will generate a service worker for your build using the [sw-precache](https://github.com/GoogleChrome/sw-precache) library. To customize your service worker, create a `sw-precache-config.js` file in your project directory that exports your configuration. See the [sw-precache README](https://github.com/GoogleChrome/sw-precache) for a list of all supported options.
-
-Note that the sw-precache library uses a cache-first strategy for maximum speed and makes some other assumptions about how your service worker should behave. Read the ["Considerations"](https://github.com/GoogleChrome/sw-precache#considerations) section of the sw-precache README to make sure that this is suitable for your application.
-
-#### Bundled and unbundled builds {#bundles}
-
-Polymer CLI generates two build versions:
-
-*   `bundled`. All fragments are bundled together to reduce the number of file
-    requests. Optimal for sending to clients or serving from servers that are
-    not HTTP/2 compatible.
-*   `unbundled`. Fragments are unbundled. Optimal for HTTP/2-compatible servers
-    and clients.
 
 ## Manage dependencies {#dependencies}
 
