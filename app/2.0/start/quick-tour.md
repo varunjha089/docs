@@ -46,11 +46,11 @@ to add contents to the `<custom-element>` when it's initialized.
 When a custom element finishes its initialization, the `ready` lifecycle callback is called.
 You can use the `ready` callback for one-time initialization work after the element is created.
 
-<p><a href="/1.0/docs/devguide/registering-elements" class="blue-button">
+<p><a href="/2.0/docs/devguide/registering-elements" class="blue-button">
   Learn more: element registration
 </a></p>
 
-<p><a href="/1.0/docs/devguide/registering-elements#lifecycle-callbacks" class="blue-button">
+<p><a href="/2.0/docs/devguide/registering-elements#lifecycle-callbacks" class="blue-button">
   Learn more: lifecycle callbacks
 </a></p>
 
@@ -72,7 +72,7 @@ You can use Polymer's DOM templating to create a shadow DOM tree for your elemen
 
 Local DOM is encapsulated inside the element.
 
-<p><a href="/1.0/docs/devguide/dom-template" class="blue-button">Learn more: DOM templating</a></p>
+<p><a href="/2.0/docs/devguide/dom-template" class="blue-button">Learn more: DOM templating</a></p>
 
 ### Compose with shadow DOM
 
@@ -120,7 +120,7 @@ The `{%raw%}{{}}{%endraw%}` is replaced by the value of the property referenced 
   <iframe frameborder="0" src="samples/name-tag/index.html" width="100%" height="40"></iframe>
 </demo-tabs>
 
-<p><a href="/1.0/docs/devguide/data-binding" class="blue-button">
+<p><a href="/2.0/docs/devguide/data-binding" class="blue-button">
 Learn more: data binding</a></p>
 
 ### Declare a property
