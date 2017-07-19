@@ -7,7 +7,7 @@ Of course, a button isn't a button if you can't click it.
 
 With annotated event listeners, Polymer gives us an easy way to listen to events. See the [documentation on handling and firing events](/{{{polymer_version_dir}}}/docs/devguide/events) for more information. 
 
-To toggle the button, all we need to do is write a method to toggle the `pressed` property when the button is pressed, and use an annotation to make sure that the method is called when the button is pressed. Polymer will take care of creating and removing the event listener, so you don't need to use `addEventListener`.
+To toggle the button, all we need to do is write a method to toggle the `pressed` property, and use an annotation to make sure that the method is called when the button is pressed. Polymer will take care of creating and removing the event listener, so you don't need to use `addEventListener`.
 
 To make the button respond to a tap or click:
 
@@ -16,9 +16,9 @@ To make the button respond to a tap or click:
    icon-toggle.html { .caption }
 
    ```html
-       toggle() {
-         this.pressed = !this.pressed;
-       }
+   toggle() {
+     this.pressed = !this.pressed;
+   }
    ```
 
 2. Add `on-click="toggle"` to the opening tag of your `<iron-icon>` element: 
