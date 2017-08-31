@@ -46,6 +46,9 @@ let merge = require('merge-stream');
 let path = require('path');
 let runSequence = require('run-sequence');
 let toc = require('toc');
+let polymerBuild = require('polymer-build');
+let PolymerProject = polymerBuild.PolymerProject;
+let HtmlSplitter = polymerBuild.HtmlSplitter;
 
 let AUTOPREFIXER_BROWSERS = ['last 2 versions', 'ios 8', 'Safari 8'];
 
@@ -309,19 +312,35 @@ gulp.task('build-bundles', 'Build element bundles', function() {
   return run('polymer build').exec();
 });
 
-gulp.task('vulcanize-demos', 'vulcanize demos', function() {
-  return gulp.src('app/1.0/samples/homepage/*/index.html', {base: 'app/1.0/samples/homepage'})
-    .pipe($.vulcanize({
-      stripComments: true,
-      inlineCss: true,
-      inlineScripts: true
-    }))
-    .pipe($.crisper()) // Separate HTML/JS into separate files.
+gulp.task('build-demos', 'build demos', function() {
+  const htmlSplitter = new HtmlSplitter();
+  const contactCardProject = new PolymerProject({
+    entrypoint: 'app/1.0/samples/homepage/contact-card/index.html'
+  });
+  const contactCard = merge(contactCardProject.sources(), contactCardProject.dependencies())
+    .pipe(contactCardProject.bundler())
+    .pipe(htmlSplitter.split())
     .pipe($.if('*.html', minifyHtml())) // Minify html output
     .pipe($.if('*.html', cssslam.gulp())) // Minify css in HTML output
     .pipe($.if('*.js', uglifyJS())) // Minify js output
-    .pipe($.if('*.js', license()))
-    .pipe(gulp.dest('dist/1.0/samples/homepage'));
+    .pipe(htmlSplitter.rejoin())
+    .pipe($.rename({dirname: ''}))
+    .pipe(gulp.dest('dist/1.0/samples/homepage/contact-card/'));
+
+  const googleMapProject = new PolymerProject({
+    entrypoint: 'app/1.0/samples/homepage/google-map/index.html'
+  });
+  const googleMap = merge(googleMapProject.sources(), googleMapProject.dependencies())
+    .pipe(googleMapProject.bundler())
+    .pipe(htmlSplitter.split())
+    .pipe($.if('*.html', minifyHtml())) // Minify html output
+    .pipe($.if('*.html', cssslam.gulp())) // Minify css in HTML output
+    .pipe($.if('*.js', uglifyJS())) // Minify js output
+    .pipe(htmlSplitter.rejoin())
+    .pipe($.rename({dirname: ''}))
+    .pipe(gulp.dest('dist/1.0/samples/homepage/google-map/'));
+
+  return merge(contactCard, googleMap);
 });
 
 gulp.task('copy', 'Copy site files (polyfills, templates, etc.) to dist/', function() {
@@ -412,7 +431,8 @@ gulp.task('generate-service-worker', writeServiceWorkerFile);
 gulp.task('default', 'Build site', ['clean', 'jshint'], function(done) {
   runSequence(
     'build-bundles',
-    ['style', 'images', 'vulcanize-demos', 'js'],
-    'copy', 'md:docs', 'md:blog', 'generate-service-worker',
+    'copy',
+    ['style', 'images', 'js', 'md:docs', 'md:blog', 'build-demos'],
+    'generate-service-worker',
     done);
 });
